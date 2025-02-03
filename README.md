@@ -1,9 +1,10 @@
 # bank-emitter
 
-Timer manager implemented
+A bank management module has been implemented
 
-The **add** method adds a timer for execution  
-The **add** method can be joined manager.add(t1).add(t2, 1, 2);  
-The **remove** method stops a specific timer and removes it from the queue  
-The **start** method starts all timers for execution  
-The **print** method returns an array of all logs  
+The **register** method registers a new counterparty. The method returns the identifier of the counterparty  
+The **add** event takes the counterparty ID as the second argument and credits the amount as the third argument  
+The **get** event takes a counterparty identifier as the second argument and a colback function as the third argument. Callback takes one argument **balance**, which indicates the amount of money at the time of event generation  
+The **withdraw** event takes the counterparty ID as the second argument and the debit amount as the third argument. The event withdraws money from the counterparty's account  
+The **send** event takes the ID of the counterparty that transfers the money as the second argument and the ID of the counterparty that receives the money as the third argument  
+The **changeLimit** event sets a limit at which no funds transfer occurs for a particular ID
