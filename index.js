@@ -8,6 +8,30 @@ class Bank extends EventEmitter{
         super();
         this.#persons = [];
         this.#countID = 0;
+
+        this.on('add', (personId, sum) =>{
+            bank.#add(personId, sum);
+        })
+        
+        this.on('get', (personId, fCall) =>{
+            bank.#get(personId, fCall);
+        })
+        
+        this.on('withdraw', (personId, sum) =>{
+            bank.#withdraw(personId, sum);
+        })
+        
+        this.on('send', (FirstId, SecondId, sum) =>{
+            bank.#send(FirstId, SecondId, sum);
+        })
+        
+        this.on('changeLimit', (personId, fCall) =>{
+            bank.#changeLimit(personId, fCall);
+        })
+        
+        this.on('error', () =>{
+            throw new Error("Something went wrong!");
+        });
     }
 
     register(person){
@@ -19,7 +43,7 @@ class Bank extends EventEmitter{
         return person.personId;
     }
 
-    add(personId, sum){
+    #add(personId, sum){
         if(sum <= 0)
             this.emit('error');     
         const index = this.#persons.findIndex(person => person.personId === personId);
@@ -28,7 +52,7 @@ class Bank extends EventEmitter{
         this.#persons[index].balance += sum;    
     }
 
-    get(personId, fCall){
+    #get(personId, fCall){
         const index = this.#persons.findIndex(person => person.personId === personId);
         if(index === -1)
             this.emit('error');
@@ -36,7 +60,7 @@ class Bank extends EventEmitter{
         fCall(balance);
     }
 
-    withdraw(personId, sum){
+    #withdraw(personId, sum){
         if(sum <= 0)
             this.emit('error');
         const index = this.#persons.findIndex(person => person.personId === personId);
@@ -47,7 +71,7 @@ class Bank extends EventEmitter{
         this.#persons[index].balance -= sum;
     }
 
-    send(FirstId, SecondId, sum){
+    #send(FirstId, SecondId, sum){
         if(sum <= 0)
             this.emit('error');
         const indexFirst = this.#persons.findIndex(person => person.personId === FirstId);
@@ -66,7 +90,7 @@ class Bank extends EventEmitter{
         this.#persons[indexSecond].balance += sum;
     }
 
-    changeLimit(personId, fCall){
+    #changeLimit(personId, fCall){
         const index = this.#persons.findIndex(person => person.personId === personId);
         if(index === -1)
             this.emit('error');
@@ -76,31 +100,6 @@ class Bank extends EventEmitter{
 
 
 const bank = new Bank();
-
-bank.on('add', (personId, sum) =>{
-    bank.add(personId, sum);
-})
-
-bank.on('get', (personId, fCall) =>{
-    bank.get(personId, fCall);
-})
-
-bank.on('withdraw', (personId, sum) =>{
-    bank.withdraw(personId, sum);
-})
-
-bank.on('send', (FirstId, SecondId, sum) =>{
-    bank.send(FirstId, SecondId, sum);
-})
-
-bank.on('changeLimit', (personId, fCall) =>{
-    bank.changeLimit(personId, fCall);
-})
-
-bank.on('error', () =>{
-    throw new Error("Something went wrong!");
-});
-
 
 const personId = bank.register({
  name: 'Pitter Black',
